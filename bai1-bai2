@@ -42,3 +42,60 @@ int main() {
     return 0;
 }
 //Bai2
+#include <iostream>
+using namespace std;
+
+bool la_nguyen_to(int n) {
+    if (n < 2) return false;
+    for (int i = 2; i <= sqrt(n); i++) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+vector<int> tim_so_nguyen_to_4k_3(int N) {
+    vector<int> so_nguyen_to_4k_3;
+    for (int i = 3; i < N; i++) {
+        if (la_nguyen_to(i) && i % 4 == 3) {
+            so_nguyen_to_4k_3.push_back(i);
+        }
+    }
+    return so_nguyen_to_4k_3;
+}
+set<int> tao_day_so_blum(int N) {
+    vector<int> nguyen_to_4k_3 = tim_so_nguyen_to_4k_3(N);
+    set<int> so_blum;
+    for (int i = 0; i < nguyen_to_4k_3.size(); i++) {
+        for (int j = i; j < nguyen_to_4k_3.size(); j++) {
+            int blum = nguyen_to_4k_3[i] * nguyen_to_4k_3[j];
+            if (blum < N) {
+                so_blum.insert(blum);
+            }
+        }
+    }
+
+    return so_blum;
+}
+bool kiem_tra_so_blum(int M, const set<int>& day_so_blum) {
+    return day_so_blum.find(M) != day_so_blum.end();
+}
+
+int main() {
+    int N, M;
+    cout << "Nhập số N: ";
+    cin >> N;
+    set<int> day_so_blum = tao_day_so_blum(N);
+    cout << "Dãy số Blum nhỏ hơn " << N << ": ";
+    for (int blum : day_so_blum) {
+        cout << blum << " ";
+    }
+    cout << endl;
+    cout << "Nhập số Blum M để kiểm tra: ";
+    cin >> M;
+    if (kiem_tra_so_blum(M, day_so_blum)) {
+        cout << "Số Blum " << M << " tồn tại trong dãy số Blum." << endl;
+    } else {
+        cout << "Số Blum " << M << " không tồn tại trong dãy số Blum." << endl;
+    }
+
+    return 0;
+}
